@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "enveloppes",
+  "info": {
+    "singularName": "enveloppe",
+    "pluralName": "enveloppes",
+    "displayName": "Enveloppes",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Categorie": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "Budget": {
+      "type": "decimal",
+      "required": true,
+      "unique": true,
+      "min": 0
+    },
+    "Operations": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::operation.operation",
+      "mappedBy": "enveloppe"
+    }
+  }
+}

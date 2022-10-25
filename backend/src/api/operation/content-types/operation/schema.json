@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "operations",
+  "info": {
+    "singularName": "operation",
+    "pluralName": "operations",
+    "displayName": "Opérations",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Libelle": {
+      "type": "string",
+      "required": true
+    },
+    "Date": {
+      "type": "date"
+    },
+    "Montant": {
+      "type": "decimal",
+      "required": true
+    },
+    "Check": {
+      "type": "boolean",
+      "default": false
+    },
+    "enveloppe": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::enveloppe.enveloppe",
+      "inversedBy": "Operations"
+    }
+  }
+}
