@@ -4,15 +4,39 @@ import {
   useState
 } from 'react'
 import MonthPicker from './MonthPicker'
+const qs = require('qs');
 
 function Operations() {
   const [error, setError] = useState(null);
   const [operations, setOperations] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(new Date());
 
+  const getQuery = () => {
+    const today = new Date()
+    const month = today.getMonth() + 1
+    const year = today.getFullYear()
+    const firstDayOfMonth = [year, month, '01'].join('-')
+    const lastDayOfMonth = [year, month, '30'].join('-') // should adapt to get last day of month
+    // TODO: sort by date
+
+    return qs.stringify(
+      {
+        filters: {
+          'Date': {
+            $between: [firstDayOfMonth, lastDayOfMonth]
+          }
+        }
+      },
+      {
+        encodeValuesOnly: true
+      }
+    )
+  }
+
+  // console.log(getQuery());
 
   useEffect(() => {
-    fetch('http://localhost:1337/api/operations', {
+    fetch(`http://localhost:1337/api/operations?${getQuery()}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
