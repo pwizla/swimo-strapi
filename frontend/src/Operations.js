@@ -3,10 +3,13 @@ import {
   useEffect,
   useState
 } from 'react'
+import MonthPicker from './MonthPicker'
 
 function Operations() {
   const [error, setError] = useState(null);
   const [operations, setOperations] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState(new Date());
+
 
   useEffect(() => {
     fetch('http://localhost:1337/api/operations', {
@@ -25,10 +28,14 @@ function Operations() {
   if (error) {
     return <div>An error occured: {error.message}</div>;
   }
+  
+  // console.log(selectedMonth)
 
   return (
     <div className="operations">
       <h1>Liste d'opérations</h1>
+      {/* <MonthPicker />  */}
+      {/* <div>you selected {new Intl.DateTimeFormat({month: 'long'}).format(selectedMonth)}</div> */}
       { operations
         ? <table
             cellPadding="10px"
