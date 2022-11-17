@@ -51,10 +51,10 @@ function Operations() {
     return <div>An error occured: {error.message}</div>;
   }
 
+  // TODO: add prev/next month selector
   return (
     <div className="operations">
       <h1>Liste d'opérations</h1>
-      // TODO: add prev/next month selector
       { operations
         ? <table
             cellPadding="10px"
