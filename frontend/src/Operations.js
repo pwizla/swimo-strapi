@@ -33,8 +33,6 @@ function Operations() {
     )
   }
 
-  // console.log(getQuery());
-
   useEffect(() => {
     fetch(`http://localhost:1337/api/operations?${getQuery()}`, {
       method: 'GET',
@@ -52,14 +50,11 @@ function Operations() {
   if (error) {
     return <div>An error occured: {error.message}</div>;
   }
-  
-  // console.log(selectedMonth)
 
   return (
     <div className="operations">
       <h1>Liste d'opérations</h1>
-      {/* <MonthPicker />  */}
-      {/* <div>you selected {new Intl.DateTimeFormat({month: 'long'}).format(selectedMonth)}</div> */}
+      // TODO: add prev/next month selector
       { operations
         ? <table
             cellPadding="10px"
@@ -75,6 +70,7 @@ function Operations() {
             </thead>
             <tbody>
               {operations.map(({ id, attributes }) => (
+                // TODO: convert to component
                 <tr key={id}>
                   <td>{attributes.Libelle}</td>
                   <td>{attributes.Date}</td>
