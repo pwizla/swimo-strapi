@@ -184,7 +184,7 @@ function Operations() {
               ))}
             </tbody>
           </table>
-        : <div>Nous n'avons malheureusement pas pu retrouver la liste d'opérations… 😅</div>
+        : <div>Il n'y a pas d'opérations à afficher pour le mois de {matchMonth(displayedMonthNumber).monthName} {displayedYear}.</div>
       }
     </div>
   )
