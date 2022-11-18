@@ -3,35 +3,49 @@ import {
   useEffect,
   useState
 } from 'react'
-import MonthPicker from './MonthPicker'
+// import MonthPicker from './MonthPicker'
 const qs = require('qs');
+
+function getQuery() {
+
+  const {firstDayOfMonth, lastDayOfMonth} = getCurrentMonth();
+
+  return qs.stringify(
+    {
+      filters: {
+        'Date': {
+          $between: [firstDayOfMonth, lastDayOfMonth]
+        }
+      },
+      sort: ['Date:asc']
+    },
+    {
+      encodeValuesOnly: true
+    }
+  )
+}
+
+function getCurrentMonth() {
+  const today = new Date()
+  const month = today.getMonth() + 1
+  const year = today.getFullYear()
+  const firstDayOfMonth = [year, month, '01'].join('-')
+  const lastDayOfMonth = [year, month, '30'].join('-') // should adapt to get last day of month
+
+  const locale = "fr-fr";
+  const monthName = today.toLocaleString(locale, { month: "long" });
+
+  return {
+    firstDayOfMonth,
+    lastDayOfMonth,
+    monthName,
+    year
+  }
+}
 
 function Operations() {
   const [error, setError] = useState(null);
   const [operations, setOperations] = useState([]);
-  const [selectedMonth, setSelectedMonth] = useState(new Date());
-
-  const getQuery = () => {
-    const today = new Date()
-    const month = today.getMonth() + 1
-    const year = today.getFullYear()
-    const firstDayOfMonth = [year, month, '01'].join('-')
-    const lastDayOfMonth = [year, month, '30'].join('-') // should adapt to get last day of month
-    // TODO: sort by date
-
-    return qs.stringify(
-      {
-        filters: {
-          'Date': {
-            $between: [firstDayOfMonth, lastDayOfMonth]
-          }
-        }
-      },
-      {
-        encodeValuesOnly: true
-      }
-    )
-  }
 
   useEffect(() => {
     fetch(`http://localhost:1337/api/operations?${getQuery()}`, {
@@ -50,11 +64,13 @@ function Operations() {
   if (error) {
     return <div>An error occured: {error.message}</div>;
   }
+  
+  const currentMonthName = `${getCurrentMonth().monthName} ${getCurrentMonth().year}`;
 
   // TODO: add prev/next month selector
   return (
     <div className="operations">
-      <h1>Liste d'opérations</h1>
+      <h1>Liste d'opérations pour le mois de <span className="current current-month">{currentMonthName}</span></h1>
       { operations
         ? <table
             cellPadding="10px"
