@@ -6,7 +6,7 @@ import {
 // import MonthPicker from './MonthPicker'
 const qs = require('qs');
 
-function matchMonthNames(monthNumber){
+function matchMonth(monthNumber){
   let monthName, numberOfDaysPerMonth;
   switch(monthNumber) {
     case 1:
@@ -55,11 +55,15 @@ function matchMonthNames(monthNumber){
       break;
     case 12:
       monthName = 'décembre';
+      numberOfDaysPerMonth = 31;
       break;
     default: 
       monthName = new Date().toLocaleString('fr-fr', { month: "long" }); 
   }
-  return monthName;
+  return {
+    monthName,
+    numberOfDaysPerMonth
+  };
 }
 
 function Operations() {
@@ -77,19 +81,19 @@ function Operations() {
       setDisplayedYear(displayedYear + 1);
     }
     setDisplayedMonthNumber(displayedMonthNumber + 1);
-    setDisplayedMonthName(matchMonthNames(displayedMonthNumber + 1));
+    setDisplayedMonthName(matchMonth(displayedMonthNumber + 1));
     setQuery(getQuery(displayedMonthNumber + 1));
     console.log(displayedMonthNumber, displayedMonthName);
   }
 
   function substractMonth() {
-    if (displayedMonthNumber < 1) { 
-      displayedMonthNumber = 12;
+    if (displayedMonthNumber === 1) { 
+      displayedMonthNumber = 13;
       displayedMonthName = 'décembre';
       setDisplayedYear(displayedYear - 1);
     }
     setDisplayedMonthNumber(displayedMonthNumber - 1);
-    setDisplayedMonthName(matchMonthNames(displayedMonthNumber - 1));
+    setDisplayedMonthName(matchMonth(displayedMonthNumber - 1));
     setQuery(getQuery(displayedMonthNumber - 1));
     console.log(displayedMonthNumber, displayedMonthName);
   }
@@ -99,10 +103,10 @@ function Operations() {
     return formatted
   }
 
-  function getQuery(displayedMonthNumber, numberOfDaysPerMonth) {
+  function getQuery(displayedMonthNumber) {
 
     const firstDayOfMonth = `${displayedYear}-${formatMonthNumber(displayedMonthNumber)}-01`;
-    const lastDayOfMonth = `${displayedYear}-${formatMonthNumber(displayedMonthNumber)}-30`;
+    const lastDayOfMonth = `${displayedYear}-${formatMonthNumber(displayedMonthNumber)}-${matchMonth(displayedMonthNumber).numberOfDaysPerMonth}`;
   
     return qs.stringify(
       {
@@ -137,7 +141,7 @@ function Operations() {
     return <div>An error occured: {error.message}</div>;
   }
   
-  const currentMonthName = `${displayedMonthName} ${displayedYear}`;
+  const currentMonthName = `${matchMonth(displayedMonthNumber).monthName} ${displayedYear}`;
 
   // TODO: add prev/next month selector
   return (
