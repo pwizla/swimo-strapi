@@ -82,8 +82,17 @@ function Operations() {
     }
     setDisplayedMonthNumber(displayedMonthNumber + 1);
     setDisplayedMonthName(matchMonth(displayedMonthNumber + 1));
-    setQuery(getQuery(displayedMonthNumber + 1));
-    console.log(displayedMonthNumber, displayedMonthName);
+    setQuery(getQuery(displayedMonthNumber + 1, displayedYear));
+  }
+
+  function getCurrentMonth() {
+    const today = new Date();
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
+    setDisplayedMonthNumber(currentMonth + 1);
+    setDisplayedMonthName(matchMonth(currentMonth));
+    setDisplayedYear(currentYear);
+    setQuery(getQuery(currentMonth + 1));
   }
 
   function substractMonth() {
@@ -94,8 +103,7 @@ function Operations() {
     }
     setDisplayedMonthNumber(displayedMonthNumber - 1);
     setDisplayedMonthName(matchMonth(displayedMonthNumber - 1));
-    setQuery(getQuery(displayedMonthNumber - 1));
-    console.log(displayedMonthNumber, displayedMonthName);
+    setQuery(getQuery(displayedMonthNumber - 1, displayedYear));
   }
 
   function formatMonthNumber(monthNumber) {
@@ -103,7 +111,7 @@ function Operations() {
     return formatted
   }
 
-  function getQuery(displayedMonthNumber) {
+  function getQuery(displayedMonthNumber, displayedYear = new Date().getFullYear()) {
 
     const firstDayOfMonth = `${displayedYear}-${formatMonthNumber(displayedMonthNumber)}-01`;
     const lastDayOfMonth = `${displayedYear}-${formatMonthNumber(displayedMonthNumber)}-${matchMonth(displayedMonthNumber).numberOfDaysPerMonth}`;
@@ -143,10 +151,10 @@ function Operations() {
   
   const currentMonthName = `${matchMonth(displayedMonthNumber).monthName} ${displayedYear}`;
 
-  // TODO: add prev/next month selector
   return (
     <div className="operations">
       <button onClick={substractMonth}>Mois précédent</button>
+      <button onClick={getCurrentMonth}>Ce mois-ci</button>
       <button onClick={addMonth}>Mois suivant</button>
       <h1>Liste d'opérations pour le mois de <span className="current current-month">{currentMonthName}</span></h1>
       { operations && operations.length > 0
