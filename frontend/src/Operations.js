@@ -71,7 +71,7 @@ function Operations() {
   return (
     <div className="operations">
       <h1>Liste d'opérations pour le mois de <span className="current current-month">{currentMonthName}</span></h1>
-      { operations
+      { operations.length > 0
         ? <table
             cellPadding="10px"
             rules="groups"
