@@ -15,3 +15,21 @@ code {
 .current.current-month {
   color: darkmagenta
 }
+
+.error {
+  color: red;
+}
+
+.button {
+  background-color: transparent;
+  padding: 0.5em;
+  border: none;
+  border-radius: 6px;
+  color: darkmagenta;
+  font-size: 16px;
+  margin: .5em;
+}
+.button:active {
+  background-color: darkmagenta;
+  color: white;
+}
