@@ -1,120 +1,53 @@
-import React from "react";
-import {
-  useEffect,
-  useState
-} from 'react'
-// import MonthPicker from './MonthPicker'
+import React, { Suspense, useEffect, useState } from 'react';
+import { months } from './months';
 const qs = require('qs');
-
-function matchMonth(monthNumber){
-  let monthName, numberOfDaysPerMonth;
-  switch(monthNumber) {
-    case 1:
-      monthName = 'janvier';
-      numberOfDaysPerMonth = 31;
-      break;
-    case 2:
-      monthName = 'février';
-      numberOfDaysPerMonth = 28;
-      break;
-    case 3:
-      monthName = 'mars';
-      numberOfDaysPerMonth = 31;
-      break;
-    case 4:
-      monthName = 'avril';
-      numberOfDaysPerMonth = 30;
-      break;
-    case 5:
-      monthName = 'mai';
-      numberOfDaysPerMonth = 31;
-      break;
-    case 6:
-      monthName = 'juin';
-      numberOfDaysPerMonth = 30;
-      break;
-    case 7:
-      monthName = 'juillet';
-      numberOfDaysPerMonth = 31;
-      break;
-    case 8:
-      monthName = 'août';
-      numberOfDaysPerMonth = 31;
-      break;
-    case 9:
-      monthName = 'septembre';
-      numberOfDaysPerMonth = 30;
-      break;
-    case 10:
-      monthName = 'octobre';
-      numberOfDaysPerMonth = 31;
-      break;
-    case 11:
-      monthName = 'novembre';
-      numberOfDaysPerMonth = 30;
-      break;
-    case 12:
-      monthName = 'décembre';
-      numberOfDaysPerMonth = 31;
-      break;
-    default: 
-      monthName = new Date().toLocaleString('fr-fr', { month: "long" }); 
-  }
-  return {
-    monthName,
-    numberOfDaysPerMonth
-  };
-}
 
 function Operations() {
   const [error, setError] = useState(null);
   const [operations, setOperations] = useState([]);
-  let [displayedMonthNumber, setDisplayedMonthNumber] = useState(new Date().getMonth() + 1);
-  let [displayedYear, setDisplayedYear] = useState(new Date().getFullYear());
-  let [displayedMonthName, setDisplayedMonthName] = useState(new Date().toLocaleString('fr-fr', { month: "long" }));
-  const [query, setQuery] = useState(getQuery(new Date().getMonth() + 1));
+  let [selectedMonthNumber, setSelectedMonthNumber] = useState(new Date().getMonth() + 1);
+  let [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [query, setQuery] = useState(getQuery());
 
   function addMonth() {
-    if (displayedMonthNumber === 12) { 
-      displayedMonthNumber = 0;
-      displayedMonthName = 'janvier';
-      setDisplayedYear(displayedYear + 1);
+    if (selectedMonthNumber === 12) { 
+      selectedMonthNumber = 0;
+      setSelectedYear(selectedYear + 1);
     }
-    setDisplayedMonthNumber(displayedMonthNumber + 1);
-    setDisplayedMonthName(matchMonth(displayedMonthNumber + 1));
-    setQuery(getQuery(displayedMonthNumber + 1, displayedYear));
+    setSelectedMonthNumber(selectedMonthNumber + 1);
+    setQuery(getQuery(selectedMonthNumber + 1, selectedYear));
   }
 
   function getCurrentMonth() {
     const today = new Date();
     const currentMonth = today.getMonth();
     const currentYear = today.getFullYear();
-    setDisplayedMonthNumber(currentMonth + 1);
-    setDisplayedMonthName(matchMonth(currentMonth));
-    setDisplayedYear(currentYear);
+    setSelectedMonthNumber(currentMonth + 1);
+    setSelectedYear(currentYear);
     setQuery(getQuery(currentMonth + 1));
   }
 
   function substractMonth() {
-    if (displayedMonthNumber === 1) { 
-      displayedMonthNumber = 13;
-      displayedMonthName = 'décembre';
-      setDisplayedYear(displayedYear - 1);
+    if (selectedMonthNumber === 1) { 
+      selectedMonthNumber = 13;
+      setSelectedYear(selectedYear - 1);
     }
-    setDisplayedMonthNumber(displayedMonthNumber - 1);
-    setDisplayedMonthName(matchMonth(displayedMonthNumber - 1));
-    setQuery(getQuery(displayedMonthNumber - 1, displayedYear));
+    setSelectedMonthNumber(selectedMonthNumber - 1);
+    setQuery(getQuery(selectedMonthNumber - 1, selectedYear));
   }
 
   function formatMonthNumber(monthNumber) {
-    const formatted = monthNumber < 10 ? `0${monthNumber.toString()}` : `${monthNumber.toString()}`
+    const formatted = monthNumber < 10 
+      ? `0${monthNumber.toString()}` 
+      : `${monthNumber.toString()}`
     return formatted
   }
 
-  function getQuery(displayedMonthNumber, displayedYear = new Date().getFullYear()) {
-
-    const firstDayOfMonth = `${displayedYear}-${formatMonthNumber(displayedMonthNumber)}-01`;
-    const lastDayOfMonth = `${displayedYear}-${formatMonthNumber(displayedMonthNumber)}-${matchMonth(displayedMonthNumber).numberOfDaysPerMonth}`;
+  function getQuery(selectedMonthNumber = new Date().getMonth() + 1, selectedYear = new Date().getFullYear()) {
+    const formattedMonthNumber = formatMonthNumber(selectedMonthNumber);
+    const numberOfDaysInSelectedMonth = months[selectedMonthNumber - 1].numberOfDays;
+    const firstDayOfMonth = `${selectedYear}-${formattedMonthNumber}-01`;
+    const lastDayOfMonth = `${selectedYear}-${formattedMonthNumber}-${numberOfDaysInSelectedMonth}`;
   
     return qs.stringify(
       {
@@ -138,7 +71,7 @@ function Operations() {
         'Content-Type': 'application/json',
       },
     })
-      .then( response => response.json())
+      .then(response => response.json())
       .then( ({ data }) => { 
         setOperations(data)
       })
@@ -146,47 +79,50 @@ function Operations() {
   }, [query])
 
   if (error) {
-    return <div>An error occured: {error.message}</div>;
+    return <div>Une erreur s'est produite: <span className="error">{error.message}</span></div>;
   }
   
-  const currentMonthName = `${matchMonth(displayedMonthNumber).monthName} ${displayedYear}`;
+  const currentMonthName = `${months[selectedMonthNumber - 1].name} ${selectedYear}`;
 
   return (
-    <div className="operations">
-      <button onClick={substractMonth}>Mois précédent</button>
-      <button onClick={getCurrentMonth}>Ce mois-ci</button>
-      <button onClick={addMonth}>Mois suivant</button>
-      <h1>Liste d'opérations pour le mois de <span className="current current-month">{currentMonthName}</span></h1>
-      { operations && operations.length > 0
-        ? <table
-            cellPadding="10px"
-            rules="groups"
-            className="operations-table">
-            <thead>
-              <tr>
-                <th>Libellé</th>
-                <th>Date</th>
-                <th>Montant</th>
-                <th>Banque</th>
-              </tr>
-            </thead>
-            <tbody>
-              {operations.map(({ id, attributes }) => (
-                // TODO: convert to component
-                <tr key={id}>
-                  <td>{attributes.Libelle}</td>
-                  <td>{attributes.Date}</td>
-                  <td className={`number ${attributes.Montant > 0 ? "positive" : "negative"}`}>
-                    {attributes.Montant}
-                  </td>
-                  <td>{attributes.Check ? '✅' : ''}</td>
+    <Suspense fallback={"Loading…"}>
+      {/* TODO: add beautiful loader */}
+      <div className="operations">
+        <button className="button button__month" onClick={substractMonth}>{'<< Mois précédent'}</button>
+        <button className="button button__month" title={`${months[new Date().getMonth()].name} ${new Date().getFullYear()}`} onClick={getCurrentMonth}>Mois en cours</button>
+        <button className="button button__month" onClick={addMonth}>{'Mois suivant >>'}</button>
+        <h1>Liste d'opérations - <span className="current current-month">{currentMonthName}</span></h1>
+        { operations && operations.length > 0
+          ? <table
+              cellPadding="10px"
+              rules="groups"
+              className="operations-table">
+              <thead>
+                <tr>
+                  <th>Libellé</th>
+                  <th>Date</th>
+                  <th>Montant</th>
+                  <th>Banque</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        : <div>Il n'y a pas d'opérations à afficher pour le mois de {matchMonth(displayedMonthNumber).monthName} {displayedYear}.</div>
-      }
-    </div>
+              </thead>
+              <tbody>
+                {operations.map(({ id, attributes }) => (
+                  // TODO: convert to component
+                  <tr key={id}>
+                    <td>{attributes.Libelle}</td>
+                    <td>{attributes.Date}</td>
+                    <td className={`number ${attributes.Montant > 0 ? "positive" : "negative"}`}>
+                      {attributes.Montant}
+                    </td>
+                    <td>{attributes.Check ? '✅' : ''}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          : <div>Pas d'opérations à afficher.</div>
+        }
+      </div>
+    </Suspense>
   )
 }
 
