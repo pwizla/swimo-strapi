@@ -6,7 +6,7 @@ import{
   Route,
   Link,
 } from "react-router-dom";
-import Operations from "./Operations";
+import MonthlyView from "./MonthlyView";
 import './App.css';
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="operations" element={<Operations />} />
+        <Route path="monthly" element={<MonthlyView />} />
       </Routes>
     </Router>
   )
@@ -24,7 +24,7 @@ function Home() {
   return (
     <header className="App-header">
       Welcome to Swimo!
-      <Link className="router-link" to="/operations">Voir opérations</Link>
+      <Link className="router-link" to="/monthly">Voir le mois en cours</Link>
     </header>
   )
 }

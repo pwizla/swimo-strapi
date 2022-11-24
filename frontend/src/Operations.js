@@ -56,7 +56,12 @@ function Operations() {
             $between: [firstDayOfMonth, lastDayOfMonth]
           }
         },
-        sort: ['Date:asc']
+        populate: {
+          enveloppe: {
+            fields: ['Categorie']
+          },
+        },
+        sort: ['Date:asc'],
       },
       {
         encodeValuesOnly: true
@@ -102,6 +107,7 @@ function Operations() {
                   <th>Libellé</th>
                   <th>Date</th>
                   <th>Montant</th>
+                  <th>Catégorie</th>
                   <th>Banque</th>
                 </tr>
               </thead>
@@ -113,6 +119,12 @@ function Operations() {
                     <td>{attributes.Date}</td>
                     <td className={`number ${attributes.Montant > 0 ? "positive" : "negative"}`}>
                       {attributes.Montant}
+                    </td>
+                    <td>{attributes.enveloppe.data
+                          && attributes.enveloppe.data.attributes
+                          &&  attributes.enveloppe.data.attributes.Categorie
+                        ? attributes.enveloppe.data.attributes.Categorie
+                        : '-'}
                     </td>
                     <td>{attributes.Check ? '✅' : ''}</td>
                   </tr>
