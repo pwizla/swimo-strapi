@@ -42,3 +42,12 @@
 .number.number--negative {
   color: tomato;
 }
+
+.monthly-view {
+  display: flex;
+  justify-content: space-around;
+}
+
+.envelopes {
+  margin-top: 4em;
+}
