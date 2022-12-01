@@ -54,7 +54,10 @@ function Envelopes ( { operations }) {
                   <td>{attributes.Categorie}</td>
                   <td>{attributes.Budget}</td>
                   <td className={`budget number ${(attributes.Budget + calculateSumForCategorie(attributes.Categorie) < 0) ? 'number--negative' : ''}`}>
-                    {attributes.Budget + calculateSumForCategorie(attributes.Categorie)}
+                    {((attributes.Budget + calculateSumForCategorie(attributes.Categorie)) % 1) !== 0
+                      ? (attributes.Budget + calculateSumForCategorie(attributes.Categorie)).toFixed(2)
+                      : (attributes.Budget + calculateSumForCategorie(attributes.Categorie))
+                    }
                   </td>
                 </tr>
               ))}
