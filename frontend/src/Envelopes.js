@@ -1,33 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
-function Envelopes () {
-  /**
-   * 1. fetch envelopes
-   * 2. display a table for envelopes
-   * 3. for each envelope, display name, total budget, and remaining budget
-   * 4. remaining budget is calculated based on relations (develop reasoning)
-   */
-
+function Envelopes ( { operations }) {
   const [error, setError ] = useState(null);
   const [envelopes, setEnvelopes] = useState([]);
-  const [sumsPerCategory, setSumsPerCategory] = useState([]);
 
-  function calculateSumForCategorie(categorie) {
-    const budgets = envelopes.reduce((accumulator, currentValue) => ({
-      ...accumulator,
-      [currentValue.attributes.Categorie]: currentValue.attributes.Budget,
-    }), {});
-    /**
-     * TODO: update by making this component aware of operations
-     * Lift state up to MonthlyView parent component
-     * see https://openclassrooms.com/en/courses/7132446-create-a-web-application-with-react-js/7208826-share-state-between-different-components
-     */
-    // const sums = operations.reduce((accumulator, currentValue) => ({
-    //   ...accumulator,
-    //   [currentValue.attributes.enveloppe.data.attributes.Categorie]: currentValue.attributes.Montant,
-    // }), {});
-    // console.log('sums', sums);
-    return budgets[categorie];
+  function calculateSumForCategorie(categoryName) {
+    const sums = operations.reduce((accumulator, currentValue) => {
+      const name = currentValue.attributes.enveloppe.data.attributes.Categorie;
+      return {
+        ...accumulator,
+        [name]: (accumulator[name] ?? 0) + currentValue.attributes.Montant,
+    }}, {});
+
+    return sums.hasOwnProperty(categoryName) ? sums[categoryName] : 0;
   }
 
   useEffect(() => {
@@ -68,7 +53,9 @@ function Envelopes () {
                 <tr key={id}>
                   <td>{attributes.Categorie}</td>
                   <td>{attributes.Budget}</td>
-                  <td>{calculateSumForCategorie(attributes.Categorie)}</td>
+                  <td className={`budget number ${(attributes.Budget + calculateSumForCategorie(attributes.Categorie) < 0) ? 'number--negative' : ''}`}>
+                    {attributes.Budget + calculateSumForCategorie(attributes.Categorie)}
+                  </td>
                 </tr>
               ))}
             </tbody>

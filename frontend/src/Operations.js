@@ -31,7 +31,7 @@ function Operations({ operations, currentMonthName, getCurrentMonth, addMonth, s
                   <tr key={id}>
                     <td>{attributes.Libelle}</td>
                     <td>{attributes.Date}</td>
-                    <td className={`number ${attributes.Montant > 0 ? "positive" : "negative"}`}>
+                    <td className={`number ${attributes.Montant > 0 ? "number--positive" : "number--negative"}`}>
                       {attributes.Montant}
                     </td>
                     <td>{attributes.enveloppe.data

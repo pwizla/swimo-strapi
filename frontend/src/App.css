@@ -36,9 +36,9 @@
   color: white;
 }
 
-.number.positive {
+.number.number--positive {
   color: mediumseagreen;
 }
-.number.negative {
+.number.number--negative {
   color: tomato;
 }
