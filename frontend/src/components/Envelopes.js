@@ -1,20 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { fetcher } from '../utils/fetcher';
+import EnvelopeLine from './EnvelopeLine';
 
 function Envelopes ( { operations }) {
   // const [error, setError ] = useState(null);
   const [envelopes, setEnvelopes] = useState([]);
-
-  function calculateSumForCategorie(categoryName) {
-    const sums = operations.reduce((accumulator, currentValue) => {
-      const name = currentValue.attributes.enveloppe.data.attributes.Categorie;
-      return {
-        ...accumulator,
-        [name]: (accumulator[name] ?? 0) + currentValue.attributes.Montant,
-    }}, {});
-
-    return sums.hasOwnProperty(categoryName) ? sums[categoryName] : 0;
-  }
 
   useEffect(() => {
     fetcher('http://localhost:1337/api/enveloppes', setEnvelopes)
@@ -41,13 +31,11 @@ function Envelopes ( { operations }) {
             </thead>
             <tbody>
               {envelopes.map(({ id, attributes }) => (
-                <tr key={id}>
-                  <td>{attributes.Categorie}</td>
-                  <td>{attributes.Budget}</td>
-                  <td className={`budget number ${(attributes.Budget + calculateSumForCategorie(attributes.Categorie) < 0) ? 'number--negative' : ''}`}>
-                    {format2Decimals(attributes.Budget + calculateSumForCategorie(attributes.Categorie))}
-                  </td>
-                </tr>
+                <EnvelopeLine
+                  key={id}
+                  attributes={attributes}
+                  operations={operations}
+                />
               ))}
             </tbody>
         </table>
