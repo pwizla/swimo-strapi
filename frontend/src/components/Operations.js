@@ -1,5 +1,5 @@
 import React, { Suspense  } from 'react';
-import { months } from './months';
+import { months } from '../utils/months';
 
 function Operations({ operations, currentMonthName, getCurrentMonth, addMonth, substractMonth }) {
 

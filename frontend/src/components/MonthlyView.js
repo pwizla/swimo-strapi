@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext } from 'react';
 import Operations from './Operations.js'
-import { months } from './months';
+import { months } from '../utils/months';
 import Envelopes from './Envelopes.js'
 const qs = require('qs');
 

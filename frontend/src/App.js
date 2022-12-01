@@ -1,4 +1,3 @@
-// import logo from './logo.svg';
 import React from "react";
 import{
   BrowserRouter as Router,
@@ -6,7 +5,7 @@ import{
   Route,
   Link,
 } from "react-router-dom";
-import MonthlyView from "./MonthlyView";
+import MonthlyView from "./components/MonthlyView";
 import './App.css';
 
 function App() {
