@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { format2Decimals } from '../utils/formatter';
+import { fetcher } from '../utils/fetcher';
 
 function Envelopes ( { operations }) {
-  const [error, setError ] = useState(null);
+  // const [error, setError ] = useState(null);
   const [envelopes, setEnvelopes] = useState([]);
 
   function calculateSumForCategorie(categoryName) {
@@ -17,22 +17,12 @@ function Envelopes ( { operations }) {
   }
 
   useEffect(() => {
-    fetch('http://localhost:1337/api/enveloppes', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then( ({ data }) => {
-        setEnvelopes(data)
-      })
-      .catch((error) => setError(error))
+    fetcher('http://localhost:1337/api/enveloppes', setEnvelopes)
   }, [])
 
-  if (error) {
-    return <div>Une erreur s'est produite: <span className="error">{error.message}</span></div>;
-  }
+  // if (error) {
+  //   return <div>Une erreur s'est produite: <span className="error">{error.message}</span></div>;
+  // }
 
   return (
     <div className="envelopes">

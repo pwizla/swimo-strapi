@@ -2,11 +2,12 @@ import React, { useState, useEffect, createContext } from 'react';
 import Operations from './Operations.js'
 import { months } from '../utils/months';
 import { formatMonthNumber } from '../utils/formatter.js';
+import { fetcher } from '../utils/fetcher.js';
 import Envelopes from './Envelopes.js'
 const qs = require('qs');
 
 function MonthlyView () {
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null);
   const [operations, setOperations] = useState([]);
   let [selectedMonthNumber, setSelectedMonthNumber] = useState(new Date().getMonth() + 1);
   let [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
@@ -66,22 +67,12 @@ function MonthlyView () {
   }
 
   useEffect(() => {
-    fetch(`http://localhost:1337/api/operations?${query}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then( ({ data }) => { 
-        setOperations(data)
-      })
-      .catch((error) => setError(error))
+    fetcher(`http://localhost:1337/api/operations?${query}`, setOperations)
   }, [query])
 
-  if (error) {
-    return <div>Une erreur s'est produite: <span className="error">{error.message}</span></div>;
-  }
+  // if (error) {
+  //   return <div>Une erreur s'est produite: <span className="error">{error.message}</span></div>;
+  // }
   
   const currentMonthName = `${months[selectedMonthNumber - 1].name} ${selectedYear}`;
 
