@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { format2Decimals } from '../utils/formatter';
 
 function Envelopes ( { operations }) {
   const [error, setError ] = useState(null);
@@ -54,10 +55,7 @@ function Envelopes ( { operations }) {
                   <td>{attributes.Categorie}</td>
                   <td>{attributes.Budget}</td>
                   <td className={`budget number ${(attributes.Budget + calculateSumForCategorie(attributes.Categorie) < 0) ? 'number--negative' : ''}`}>
-                    {((attributes.Budget + calculateSumForCategorie(attributes.Categorie)) % 1) !== 0
-                      ? (attributes.Budget + calculateSumForCategorie(attributes.Categorie)).toFixed(2)
-                      : (attributes.Budget + calculateSumForCategorie(attributes.Categorie))
-                    }
+                    {format2Decimals(attributes.Budget + calculateSumForCategorie(attributes.Categorie))}
                   </td>
                 </tr>
               ))}

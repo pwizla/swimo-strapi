@@ -1,6 +1,7 @@
 import React, { useState, useEffect, createContext } from 'react';
 import Operations from './Operations.js'
 import { months } from '../utils/months';
+import { formatMonthNumber } from '../utils/formatter.js';
 import Envelopes from './Envelopes.js'
 const qs = require('qs');
 
@@ -36,13 +37,6 @@ function MonthlyView () {
     }
     setSelectedMonthNumber(selectedMonthNumber - 1);
     setQuery(getQuery(selectedMonthNumber - 1, selectedYear));
-  }
-
-  function formatMonthNumber(monthNumber) {
-    const formatted = monthNumber < 10 
-      ? `0${monthNumber.toString()}` 
-      : `${monthNumber.toString()}`
-    return formatted
   }
 
   function getQuery(selectedMonthNumber = new Date().getMonth() + 1, selectedYear = new Date().getFullYear()) {
