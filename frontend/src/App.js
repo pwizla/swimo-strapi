@@ -13,7 +13,6 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="monthly" element={<MonthlyView />} />
       </Routes>
     </Router>
   )
@@ -22,8 +21,7 @@ function App() {
 function Home() {
   return (
     <header className="App-header">
-      Welcome to Swimo!
-      <Link className="router-link" to="/monthly">Voir le mois en cours</Link>
+      <MonthlyView />
     </header>
   )
 }
