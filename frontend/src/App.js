@@ -1,9 +1,8 @@
 import React from "react";
-import{
+import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Link,
 } from "react-router-dom";
 import MonthlyView from "./components/MonthlyView";
 import './App.css';
