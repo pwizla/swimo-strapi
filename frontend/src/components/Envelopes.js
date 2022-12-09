@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { fetcher } from '../utils/fetcher';
 import EnvelopeLine from './EnvelopeLine';
 
+// type state & api & props
 function Envelopes ( { operations }) {
   // const [error, setError ] = useState(null);
   const [envelopes, setEnvelopes] = useState([]);

@@ -1,3 +1,4 @@
+// types
 function fetcher (url, stateHandler) {
   fetch(url, {
     method: 'GET',

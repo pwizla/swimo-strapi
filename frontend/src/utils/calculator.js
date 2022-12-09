@@ -1,3 +1,4 @@
+// types
 function calculateSumForCategorie(operations, categoryName) {
   const sums = operations.reduce((accumulator, currentValue) => {
     const name = currentValue.attributes.enveloppe.data.attributes.Categorie;

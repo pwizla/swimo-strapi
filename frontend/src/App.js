@@ -17,6 +17,7 @@ function App() {
   )
 }
 
+// Move to it's own container
 function Home() {
   return (
     <header className="App-header">
