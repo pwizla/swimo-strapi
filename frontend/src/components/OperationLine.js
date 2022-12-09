@@ -1,5 +1,6 @@
 import { React } from 'react';
 
+// type props
 const OperationLine = ({ id, attributes }) => (
   <tr key={id}>
     <td>{attributes.Libelle}</td>
